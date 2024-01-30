@@ -9,6 +9,7 @@ interface IModal {
     onClose: () => void
 }
 export function Modal({ data, onSave, onClose }: IModal) {
+    const itemKey = Object.entries(data).filter((v) => typeof v[1] === 'string')[0]
     const itemString = Object.values(data).filter(v => typeof v === 'string')[0] as string
     const [name, setName] = useState<string>(itemString);
 
@@ -19,7 +20,7 @@ export function Modal({ data, onSave, onClose }: IModal) {
 
     function handleSubmit(e: React.ChangeEvent<HTMLFormElement>) {
         e.preventDefault();
-        onSave({ ...data, name })
+        onSave({ ...data, [itemKey[0]]: name })
     }
     return (
         <form onSubmit={handleSubmit}>
