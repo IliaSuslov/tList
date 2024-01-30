@@ -32,7 +32,6 @@ export function Table({ data, filters, onEditClick }: ITableProps) {
     }
 
     const headersHandler: Record<string, string> = {
-        'name': 'name',
         'title': 'name',
         'description': 'name',
         'active': "status",
@@ -62,7 +61,7 @@ export function Table({ data, filters, onEditClick }: ITableProps) {
             <thead >
                 <tr >
                     {headers.map((header) => (
-                        <th className="text-left p-2 capitalize text-slate-800" key={header} >{headersHandler[header]}</th>
+                        <th className="text-left p-2 capitalize text-slate-800" key={header} >{headersHandler[header] ?? header}</th>
                     ))}
                 </tr>
             </thead>
