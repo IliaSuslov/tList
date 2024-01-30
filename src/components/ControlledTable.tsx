@@ -12,7 +12,7 @@ import { Modal } from "./Modal";
 const options = [{ value: 'active', label: 'Active' }, { value: 'inactive', label: 'Inactive' }]
 
 export function ControlledTable({ data }: { data: Record<string, unknown>[] }) {
-    const [tableData] = useState(data)
+    const [tableData, setTableData] = useState(data)
     const searchRef = useRef<HTMLInputElement>(null)
     const [selectedValue, setSelectValue] = useState<string>('')
     const [filters, setFilters] = useState<{ status: string | undefined, search: string | undefined }>({ status: undefined, search: undefined })
@@ -38,18 +38,11 @@ export function ControlledTable({ data }: { data: Record<string, unknown>[] }) {
     }
 
     function saveItem(updatedItem: Record<string, unknown>) {
-        let changedItem = tableData.find(item => item.id === updatedItem.id)
-        if (changedItem?.name) {
-            changedItem.name = updatedItem.name
-        }
-        if (changedItem?.title) {
-            changedItem.title = updatedItem.name
-        }
-        if (changedItem?.description) {
-            changedItem.description = updatedItem.name
-        }
+        const newData = tableData.map(item => (item.id === updatedItem.id ? updatedItem : item));
+        setTableData(newData)
         setOpened(false)
     }
+
     return (
         <>
             <div className="flex justify-end gap-2">
