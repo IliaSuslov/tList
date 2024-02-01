@@ -6,14 +6,13 @@ interface ITableProps {
     data: Record<string, unknown>[];
     filters: { status?: string, search?: string }
     onEditClick: (item: Record<string, unknown>) => void
+    headers: Record<string, string>
 }
 
-export function Table({ data, filters, onEditClick }: ITableProps) {
+export function Table({ data, filters, headers, onEditClick }: ITableProps) {
     if (!data || data.length === 0) {
         return <p>No data available.</p>;
     }
-
-    const headers = Object.keys(data[0]).filter(v => v !== 'id');
 
     function handleUniqueRows(header: string, row: unknown): string {
         switch (header) {
@@ -29,16 +28,6 @@ export function Table({ data, filters, onEditClick }: ITableProps) {
                 return moment(row as string).format("DD/MM/YYYY hh:mm")
         }
         return row as string
-    }
-
-    const headersHandler: Record<string, string> = {
-        'title': 'name',
-        'description': 'name',
-        'active': "status",
-        'createdAt': 'created',
-        'updatedAt': 'updated',
-        'publishedAt': "published",
-        'removedAt': "removed",
     }
 
     function filterName(item: Record<string, unknown>): boolean {
@@ -60,15 +49,15 @@ export function Table({ data, filters, onEditClick }: ITableProps) {
         <table className="w-full rounded-md bg-slate-100">
             <thead >
                 <tr >
-                    {headers.map((header) => (
-                        <th className="text-left p-2 capitalize text-slate-800" key={header} >{headersHandler[header] ?? header}</th>
+                    {Object.keys(data[0]).filter(key => headers[key]).map((header) => (
+                        <th className="text-left p-2 capitalize text-slate-800" key={header}>{headers[header]}</th>
                     ))}
                 </tr>
             </thead>
             <tbody>
                 {data.filter(filterName).map((row, index) => (
                     <tr key={index} className={twMerge(index % 2 == 0 && 'bg-white')} >
-                        {headers.map((header, i) => (
+                        {Object.keys(data[0]).filter(key => headers[key]).map((header, i) => (
                             <td className={twMerge("p-2", i == 0 && 'text-blue-400 w-1/2')} key={header}>{handleUniqueRows(header, row[header])}</td>
                         ))}
                         <td className="flex justify-center py-2"><Button variant="lightGray" onClick={() => onEditClick(row)}>Edit</Button></td>

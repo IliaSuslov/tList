@@ -11,7 +11,7 @@ import { Modal } from "./Modal";
 
 const options = [{ value: 'active', label: 'Active' }, { value: 'inactive', label: 'Inactive' }]
 
-export function ControlledTable({ data }: { data: Record<string, unknown>[] }) {
+export function ControlledTable({ data, headers }: { data: Record<string, unknown>[], headers: Record<string, string> }) {
     const [tableData, setTableData] = useState(data)
     const searchRef = useRef<HTMLInputElement>(null)
     const [selectedValue, setSelectValue] = useState<string>('')
@@ -55,7 +55,7 @@ export function ControlledTable({ data }: { data: Record<string, unknown>[] }) {
                     Filter
                 </Button>
             </div>
-            <Table data={tableData} filters={filters} onEditClick={selectItem} />
+            <Table data={tableData} filters={filters} onEditClick={selectItem} headers={headers} />
 
             {isOpened &&
                 <Modal data={selectedItem} onSave={saveItem} onClose={closeModal} />
